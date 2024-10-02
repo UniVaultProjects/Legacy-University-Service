@@ -1,0 +1,8 @@
+#Ignore node_modules
+node_modules
+
+#Ignore Env
+.env.dev
+
+#Ignore JS Build
+dist
