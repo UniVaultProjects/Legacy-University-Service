@@ -15,9 +15,11 @@ export default (req : Request , res : Response , responseCode : number , respons
         message : responseMessage , 
         data: data
     }
+
     console.info(`CONTROLLER_RESPONSE `,{
         meta : response 
     })
+    
     if(config.ENV == EApplicationEnvironment.PRODUCTION){
         delete response.request.ip
     }

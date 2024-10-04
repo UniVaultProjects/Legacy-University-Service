@@ -1,8 +1,9 @@
 import { Router } from 'express';
-import apiController from '../controller/apiController';
+import instituteController from '../controller/instituteController';
 
 const router = Router()
 
-router.route('/self').get(apiController.self)
+/* Routes for institutions */
+router.route('/v1/institute').post(instituteController.InstitutePost)
 
 export default router
