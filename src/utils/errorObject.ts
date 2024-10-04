@@ -17,7 +17,6 @@ export default (err : Error | unknown , req : Request , errorStatusCode : number
         message : err instanceof Error ? err.message || responseMessage.SOMETHING_WENT_WRONG : responseMessage.SOMETHING_WENT_WRONG , 
         data : null ,
         trace : err instanceof Error ? {err : err.stack} : null
-
     }
 
     console.info(`CONTROLLER_ERROR`,{

@@ -8,8 +8,9 @@ const app : Application = express()
 app.use(express.json())
 
 // Router
-app.use('/api/v1',router)
+app.use('/api',router)
 
+// Global Error Handler
 app.use(globalErrorHandler)
 
 export default app
