@@ -28,6 +28,8 @@ export default {
   InstitutePost: async (req: Request, res: Response, next: NextFunction) => {
     try {
       // Validate Request Body
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const {name,short_name,desc,order_no} = req.body
       const { error, value } = schema.validate(req.body);
       
       // Validation Error
