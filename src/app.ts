@@ -8,15 +8,16 @@ const app: Application = express();
 
 // Middleware
 // Use cookie-parser middleware to parse cookies
+
 app.use(cookieParser());
-app.use(express.json());
 app.use(
   cors({
     // Auth Action Service on Port 3000
-    origin: 'http://localhost:3000', // Allow requests from the other backend
-    credentials: true, // Allow cookies to be sent with requests
+    origin: '*', // Allow requests from the other backend
+    credentials: true // Allow cookies to be sent with requests
   })
 );
+app.use(express.json());
 // Router
 app.use('/api', router);
 

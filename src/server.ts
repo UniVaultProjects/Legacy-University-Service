@@ -21,7 +21,7 @@ const server = app.listen(config.PORT)
         console.error(`APPLICATION_ERROR`, {meta : err})
         server.close((error)=>{
             if (error) {
-                console.info(`Application Error`,{meta : error})
+                console.info(`Server Error`,{meta : error})
             }
             process.exit(1)
         })

@@ -20,11 +20,13 @@ export default {
   // eslint-disable-next-line @typescript-eslint/require-await
   testGet: async (_: Request, res: Response) => {
     try {
-      res.status(200).json('Ok');
+      res.status(200).json('Welcome to Institute Service');
     } catch (error) {
       throw error;
     }
   },
+
+  
   InstituteGet: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const schema = Joi.object({
@@ -55,9 +57,13 @@ export default {
       throw error;
     }
   },
-  InstitutePost: async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    try {
 
+  InstitutePost: async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    try {
       // Validation schema for incoming data
       const schema = Joi.object({
         name: Joi.string().min(3).max(75).required(),
