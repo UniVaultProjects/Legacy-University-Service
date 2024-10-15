@@ -26,11 +26,10 @@ export default {
     }
   },
 
-  
   InstituteGet: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const schema = Joi.object({
-        id: Joi.string().required(),
+        id: Joi.string().required()
       });
 
       //eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -45,8 +44,8 @@ export default {
       }
       const get = await prisma.institute.findUnique({
         where: {
-          id: getData,
-        },
+          id: getData
+        }
       });
 
       if (!get) {
@@ -69,7 +68,7 @@ export default {
         name: Joi.string().min(3).max(75).required(),
         short_name: Joi.string().required(),
         desc: Joi.string().required(),
-        order_no: Joi.number().integer().required(),
+        order_no: Joi.number().integer().required()
       });
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { name, short_name, desc, order_no } = req.body;
@@ -84,7 +83,7 @@ export default {
       // Here you would typically save `post` to the database
       // await Institute Create(post);
       const post = await prisma.institute.create({
-        data: postData,
+        data: postData
       });
 
       // Send a success response
@@ -92,5 +91,5 @@ export default {
     } catch (error) {
       httpError(next, error, req, 500);
     }
-  },
+  }
 };
