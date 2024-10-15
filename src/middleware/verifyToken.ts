@@ -10,22 +10,26 @@ export default {
   ): Promise<void> => {
     try {
       // Get the required token from the request body.
-      const token = req.cookies.token
+      const token = req.cookies.token;
 
       // Using axios to send a post request to our Authentication service
       // to verify the provided token and ensure permissions & security .
       // Authentication Service URL for endpoint.
-      const url = 'http://localhost:3000/api/v1/validtoken';
+      const url = 'http://localhost:3000/auth/validate';
 
       // Make the POST request with withCredentials enabled and cookies sent
-      const verifyToken = await axios.post(url,{
-        token : token
-      }, {
-        withCredentials: true // Enable sending cookies with the request
-      });
-
+      const sendToken = await axios.post(
+        url,
+        {
+          token: token
+        },
+        {
+          withCredentials: true // Enable sending cookies with the request
+        }
+      );
+      
       // If verification fails, Backend 1 will send a 401 or other error
-      if (verifyToken.status !== 200) {
+      if (sendToken.status !== 200) {
         res.status(401).json({ error: 'Invalid token' });
       }
       next();
