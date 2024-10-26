@@ -1,5 +1,5 @@
 import express, { Application } from 'express';
-import router from './router/router';
+import routes from './router/institute.router'
 import globalErrorHandler from './middleware/globalErrorHandler';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
@@ -18,8 +18,10 @@ app.use(
   })
 );
 app.use(express.json());
+
+
 // Router
-app.use('/api', router);
+app.use('/api', routes);
 
 // Global Error Handler
 app.use(globalErrorHandler);

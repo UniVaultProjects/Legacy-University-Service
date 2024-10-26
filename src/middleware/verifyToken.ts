@@ -15,7 +15,7 @@ export default {
       // Using axios to send a post request to our Authentication service
       // to verify the provided token and ensure permissions & security .
       // Authentication Service URL for endpoint.
-      const url = 'http://localhost:3000/auth/validate';
+      const url = 'http://localhost:3000/v1/istokenvalid';
 
       // Make the POST request with withCredentials enabled and cookies sent
       const sendToken = await axios.post(
