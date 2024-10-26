@@ -9,4 +9,4 @@ const router = Router()
 router.route('/institute').post(verifyToken.verifyToken,instituteValid.Validation,instituteController.InstitutePost);
 
 
-export default router
+export default router    
