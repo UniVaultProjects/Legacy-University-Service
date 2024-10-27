@@ -18,7 +18,7 @@ router.route('/institute')
 // Route to create a new institute
 // Requires token verification and validation
 router.route('/institute')
-  .post(authComm.verifyToken,instituteValid, instituteController.InstitutePost);
+  .post(authComm.verifyToken,instituteValid.post, instituteController.InstitutePost);
 
 // Route to delete an existing institute
 // Requires token verification
