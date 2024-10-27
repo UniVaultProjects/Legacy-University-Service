@@ -11,6 +11,7 @@ const app: Application = express();
 // Use cookie-parser middleware to parse cookies
 
 // Configure session middleware
+app.use(express.json());
 app.use(cookieParser());
 
 
@@ -33,7 +34,6 @@ app.use(
     credentials: true // Allow cookies to be sent with requests
   })
 );
-app.use(express.json());
 
 // Router
 app.use('/api', routes);

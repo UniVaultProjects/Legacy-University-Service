@@ -2,11 +2,12 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Request, Response, NextFunction } from 'express';
 import axios from 'axios';
+import config from '../config/config';
 
 export default {
   verifyToken: async (
     req: Request,
-    res : Response,
+    res: Response,
     next: NextFunction
   ): Promise<void> => {
     try {
@@ -21,19 +22,19 @@ export default {
       // Using axios to send a post request to our Authentication service
       // to verify the provided token and ensure permissions & security .
       // Authentication Service URL for endpoint.
-      const url = 'http://localhost:3000/v1/istokenvalid';
+      const url: string = config.AUTH_URL;
 
       // Make the POST request with withCredentials enabled and cookies sent
       const sendToken = await axios.post(
         url,
         {
           method: req.method,
-          action: 'Redundant',
+          action: 'NA',
           entity: 'NOTES_SERVICE',
           token
         },
         {
-          withCredentials: true // Enable sending cookies with the request
+          withCredentials: true
         }
       );
 
@@ -42,10 +43,24 @@ export default {
         res.status(401).json({ error: 'Invalid token' });
       }
 
+      // Accessing Token Payload , specifically Institute permissions.
       const permissions = sendToken.data.data.permissions;
-      const allowedOperations: string[] = permissions.institutes;
 
-      req.user = allowedOperations;
+      // Accessing Institute array containing
+      // Institute id's and allow permissions.
+      const allowedOperations = permissions.institutes;
+
+      // Accessing Institute array containing
+      // It contains Either ? ADMIN : MANAGER.
+      const userType = sendToken.data.data;
+
+      // Adding allowedOperations value to request object.
+      req.ops = allowedOperations;
+
+      // Adding user to request object.
+      req.user = userType;
+
+      // Control over to next middleware or Controller.
       next();
     } catch (error) {
       throw error;
