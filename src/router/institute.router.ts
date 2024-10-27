@@ -1,22 +1,29 @@
 import { Router } from 'express';
 import instituteController from '../controller/Institute/instituteController';
-import verifyToken from '../middleware/verifyToken';
+import authComm from '../middleware/authComm';
 import instituteValid from '../validation/institute.valid';
+import checkUserHandler from '../middleware/checkUser';
 
 // Create a new router instance for handling institution-related routes
 const router = Router();
 
 /* Routes for institutions */
 
+// Route to all a new institute
+// Requires token verification and validation
+router.route('/institute')
+  .get(authComm.verifyToken,checkUserHandler('ADMIN'),instituteController.InstituteGet);
+
+  
 // Route to create a new institute
 // Requires token verification and validation
 router.route('/institute')
-  .post(verifyToken.verifyToken, instituteValid.Validation, instituteController.InstitutePost);
+  .post(authComm.verifyToken,instituteValid, instituteController.InstitutePost);
 
 // Route to delete an existing institute
 // Requires token verification
 router.route('/institute')
-  .delete(verifyToken.verifyToken, instituteController.InstituteDelete);
+  .delete(authComm.verifyToken, instituteController.InstituteDelete);
 
 // Export the router for use in other parts of the application
 export default router;

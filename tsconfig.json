@@ -1,13 +1,13 @@
 {
   "compilerOptions": {
-    "target": "es2016",                                  /* Set the JavaScript language version for emitted JavaScript. */
+    "target": "ES2016",                                  /* Set the JavaScript language version for emitted JavaScript. */
     "module": "commonjs",                                /* Specify what module code is generated. */
     "rootDir": "./src",                                  /* Specify the root folder within your source files. */
     "outDir": "./dist",                                   /* Specify an output folder for all emitted files. */
     "removeComments": true,                               /* Disable emitting comments. */
     "esModuleInterop": true,                             /* Enable interoperability between CommonJS and ES Modules. */
     "forceConsistentCasingInFileNames": true,            /* Ensure that casing is correct in imports. */
-    "typeRoots": [ "@types" ],
+    "typeRoots": [ "@types" ],                           /* Path for @types in node_modules */
 
     /* Enable strict type checking options */
     "strict": true,                                      /* Enable all strict type-checking options. */
@@ -17,6 +17,6 @@
     "strictPropertyInitialization": true,                /* Ensure class properties are initialized in the constructor. */
     "noImplicitReturns": true,                           /* Error for code paths that do not explicitly return in a function. */
     "noUnusedParameters": true,                          /* Raise an error when a function parameter isn't used. */
-    "skipLibCheck": true,                                /* Skip type checking of declaration files. */
+    "skipLibCheck": true,                            /* Skip type checking of declaration files. */
   }
 }

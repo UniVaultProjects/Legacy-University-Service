@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Request, Response, NextFunction } from 'express';
 import httpResponse from '../../utils/httpResponse';
@@ -13,7 +15,22 @@ export default {
     try {
       // finds all the data in Institute
       // can only view that institue for which permission has been granted.
-      const data = await prisma.institute.findMany({});
+
+      const allowedOps = req.ops;
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+      const ids = allowedOps.map((items: any) => items.id);
+
+      // only finding allowed institutes.
+      const data = await prisma.institute.findMany({
+        where: {
+          id: {
+            in: ids
+          }
+        }
+      });
+
+      
+      // Success Response.
       return httpResponse(req, res, 200, responseMessage.SUCCESS, data);
     } catch (error) {
       throw error;
@@ -74,8 +91,8 @@ export default {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === 'P2025') {
           // Record not found error
-           res.status(400).json({ error: 'Institute not found' });
-           return;
+          res.status(400).json({ error: 'Institute not found' });
+          return;
         }
       }
       httpError(next, error, req, 500);
