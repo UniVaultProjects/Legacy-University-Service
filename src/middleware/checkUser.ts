@@ -22,6 +22,7 @@ function checkUserHandler(user: 'ADMIN' | 'MANAGER') {
         res.status(403).send('Access Denied!'); // Use 403 for forbidden access
       }
     } catch (error) {
+      console.log("Test")
       throw error;
     }
   };
