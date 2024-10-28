@@ -1,30 +1,35 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
 import { Request, Response, NextFunction } from 'express';
 import httpResponse from '../../utils/httpResponse';
 import responseMessage from '../../constant/responseMessage';
 import httpError from '../../utils/httpError';
 import { PrismaClient, Prisma } from '@prisma/client';
 
+
 const prisma = new PrismaClient();
 
+
 export default {
-
   /**
- * @Route: GET /login
- * Export an object with login method for user authentication.
- **/
+   * @Route: GET /institute
+   * Export an object with login method for user authentication.
+   * Here AuthComm is passing a req.ops object that contains
+   * various metadata such as institute id's and operations allowed.
+   * only allowed operation [GET] and allowed institutes can be accesed.
+   **/
 
-  InstituteGet: async (req: Request, res: Response) => {
+  InstituteGet: async (req: Request, res: Response, next: NextFunction) => {
     try {
 
-      // finds all the data in Institute
+         // finds all the data in Institute
       // can only view that institue for which permission has been granted.
-      const allowedOps = req.ops;
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
-      const ids = allowedOps.map((items: any) => items.id);
 
+      const grantedPermissions = req.ops;
+
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-return
+      const ids : string[] = grantedPermissions.map((items: any) => items.id);
 
       // only finding allowed institutes.
       const data = await prisma.institute.findMany({
@@ -35,10 +40,11 @@ export default {
         }
       });
 
+      
       // Success Response.
-      return httpResponse(req, res, 200, responseMessage.SUCCESS, data);
+      return httpResponse(req, res, 200, responseMessage.SUCCESS,data);
     } catch (error) {
-      throw error;
+      httpError(next, error, req, 500);
     }
   },
 

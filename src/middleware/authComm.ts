@@ -56,7 +56,7 @@ export default {
 
       // Adding allowedOperations value to request object.
       req.ops = allowedOperations;
-
+    
       // Adding user to request object.
       req.user = userType;
 
