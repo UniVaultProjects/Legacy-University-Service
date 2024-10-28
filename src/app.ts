@@ -37,7 +37,7 @@ app.use(
 
 // Router
 app.use('/api', routes);
-console.log("HI")
+
 
 // Global Error Handler
 app.use(globalErrorHandler);

@@ -2,7 +2,7 @@
   "name": "notes_adapter_fork_univault",
   "version": "1.0.0",
   "description": "Notes Service",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "dist": "npx tsc",
     "dev": "cross-env NODE_ENV=dev nodemon src/server.ts",
