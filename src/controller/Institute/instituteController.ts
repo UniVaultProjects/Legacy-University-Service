@@ -10,15 +10,21 @@ import { PrismaClient, Prisma } from '@prisma/client';
 const prisma = new PrismaClient();
 
 export default {
-  // Get all institutes
+
+  /**
+ * @Route: GET /login
+ * Export an object with login method for user authentication.
+ **/
+
   InstituteGet: async (req: Request, res: Response) => {
     try {
+
       // finds all the data in Institute
       // can only view that institue for which permission has been granted.
-
       const allowedOps = req.ops;
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
       const ids = allowedOps.map((items: any) => items.id);
+
 
       // only finding allowed institutes.
       const data = await prisma.institute.findMany({
@@ -29,7 +35,6 @@ export default {
         }
       });
 
-      
       // Success Response.
       return httpResponse(req, res, 200, responseMessage.SUCCESS, data);
     } catch (error) {

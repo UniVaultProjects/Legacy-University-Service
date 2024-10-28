@@ -1,22 +1,25 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// This is your Prisma schema file.
+// Learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
+// Generator block for creating a Prisma client
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client-js" // Specifies the client generator to use
 }
 
+// Datasource block for configuring the database connection
 datasource db {
-  provider = "mongodb"
-  url      = env("DATABASE_URL")
+  provider = "mongodb" // Specifies the database provider (MongoDB)
+  url      = env("DATABASE_URL") // Uses an environment variable for the database URL
 }
 
+// Model definition for the Institute entity
 model Institute {
-  id          String    @id @default(auto()) @map("_id") @db.ObjectId
-  name        String
-  short_name  String
-  desc        String
-  order_no    Int
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId // Unique identifier, auto-generated ObjectId
+  name        String    // Name of the institute
+  short_name  String    // Short name of the institute
+  desc        String    // Description of the institute
+  order_no    Int       // Order number for sorting
 }
