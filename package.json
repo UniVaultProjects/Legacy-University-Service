@@ -11,8 +11,7 @@
     "lint:fix": "eslint  --fix",
     "format:check": "prettier . --check",
     "format:fix": "prettier . --fix",
-    "prepare": "husky",
-    "test": "jest"
+    "prepare": "husky"
   },
   "author": "UniVault Company",
   "license": "ISC",
