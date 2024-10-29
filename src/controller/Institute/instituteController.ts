@@ -102,7 +102,7 @@ export default {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === 'P2025') {
           // Record not found error
-          res.status(400).json({ error: 'Institute not found' });
+          res.status(400).json({ error: 'institute not found' });
           return;
         }
       }

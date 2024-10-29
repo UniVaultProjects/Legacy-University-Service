@@ -37,3 +37,22 @@ Add the following line to your `.env` file in the root of your project:
 ```plaintext
 DATABASE_URL=<your-database-connection-string>
 
+```
+
+## Building TypeScript
+
+To compile your TypeScript files, you can use the TypeScript compiler (`tsc`). You can run it directly using `npx`, which executes the binary without installing it globally.
+
+### Using `npx tsc`
+
+Run the following command to build your TypeScript files:
+
+```bash
+npx tsc
+```
+ ## Running the Project
+
+To start the development server, use the following command:
+
+```bash
+npm run dev
