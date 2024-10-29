@@ -38,6 +38,7 @@ app.use(
 // Router
 app.use('/api', routes);
 
+
 // Global Error Handler
 app.use(globalErrorHandler);
 

@@ -2,7 +2,7 @@
   "name": "notes_adapter_fork_univault",
   "version": "1.0.0",
   "description": "Notes Service",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "dist": "npx tsc",
     "dev": "cross-env NODE_ENV=dev nodemon src/server.ts",
@@ -11,8 +11,7 @@
     "lint:fix": "eslint  --fix",
     "format:check": "prettier . --check",
     "format:fix": "prettier . --fix",
-    "prepare": "husky",
-    "test": "jest"
+    "prepare": "husky"
   },
   "author": "UniVault Company",
   "license": "ISC",

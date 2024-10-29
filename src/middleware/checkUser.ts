@@ -12,12 +12,17 @@ import { Request, Response, NextFunction } from 'express';
 */
 
 function checkUserHandler(user: 'ADMIN' | 'MANAGER') {
-  return function (req: Request, res: Response, next: NextFunction) {
-    // double typo checking ensures that req.user object exists .
-    if (req.user && req.user['user-type'] === user) {
-      next();
-    } else {
-      res.status(403).send('Access Denied!'); // Use 403 for forbidden access
+  // eslint-disable-next-line @typescript-eslint/require-await
+  return async function (req: Request, res: Response, next: NextFunction) {
+    try {
+      // double typo checking ensures that req.user object exists .
+      if (req.user && req.user['user-type'] === user) {
+        next();
+      } else {
+        res.status(403).send('Access Denied!'); // Use 403 for forbidden access
+      }
+    } catch (error) {
+      throw error;
     }
   };
 }
