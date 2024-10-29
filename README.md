@@ -89,6 +89,8 @@ To customize the type definitions for Express in your project, follow these step
            }
        };
    }
+
+   ```
    
 ### Generate Prisma Client & Schema generation
 
