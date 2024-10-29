@@ -56,3 +56,36 @@ To start the development server, use the following command:
 
 ```bash
 npm run dev
+```
+
+# Important :  Modifying Type Definitions for Express
+
+To customize the type definitions for Express in your project, follow these steps:
+
+1. **Locate the Type Definitions**:
+   Navigate to the `node_modules/@types/express` directory in your project.
+
+2. **Edit `index.d.ts`**:
+   Open the `index.d.ts` file within the `express` folder.
+
+3. **Add Custom Code**:
+   Insert the following code at the top of the file:
+
+   ```typescript
+   import * as express from "express";
+
+   declare global {
+       namespace Express {
+           interface Request {
+               ops: {
+                   id: string;
+                   allow: string[];
+                   map: any;
+               };
+
+               user: {
+                   'user-type': string;
+               };
+           }
+       };
+   }
