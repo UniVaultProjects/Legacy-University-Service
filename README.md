@@ -58,7 +58,7 @@ To start the development server, use the following command:
 npm run dev
 ```
 
-# Important :  Modifying Type Definitions for Express
+### Important :  Modifying Type Definitions for Express
 
 To customize the type definitions for Express in your project, follow these steps:
 
@@ -89,3 +89,11 @@ To customize the type definitions for Express in your project, follow these step
            }
        };
    }
+   
+### Generate Prisma Client & Schema generation
+
+to generate required schema this command is required
+   
+```bash
+npx prisma generate
+```
