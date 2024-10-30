@@ -12,11 +12,11 @@ import { UserType } from '../enum/user-type'
 
 */
 
-function checkUserHandler(user: UserType) {
+function checkUserHandler(users: UserType[]) {
     return function (req: Request, res: Response, next: NextFunction) {
         try {
             // double typo checking ensures that req.user object exists .
-            if (req.user_details && req.user_details.user_type === user) {
+            if (req.user_details && users.includes(req.user_details.user_type)) {
                 next()
             } else {
                 res.status(403).send('Access Denied!') // TODO:Use 403 for forbidden access
