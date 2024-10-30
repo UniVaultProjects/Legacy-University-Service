@@ -9,9 +9,6 @@ import { Allow } from '../../enum/permissions-allowed'
 
 const prisma = new PrismaClient()
 
-interface GetInstituteRequestBody {
-    id: string[]
-}
 
 interface PostInstituteRequestBody {
     name: string
@@ -33,8 +30,12 @@ export default {
     only allowed operation [GET] and allowed institutes can be accesed.
    **/
 
-    InstituteGet: async (req: Request<{}, {}, GetInstituteRequestBody>, res: Response, next: NextFunction) => {
+    InstituteGet: async (req: Request, res: Response, next: NextFunction) => {
         try {
+            if(!req.user_details){
+                throw new Error('Something went wrong!');
+            };
+
             let institutes: Institute[] = []
             if (req.user_details.user_type == UserType.admin) {
                 // For admin

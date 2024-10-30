@@ -16,6 +16,8 @@ export default tseslint.config({
     rules: {
         'no-console': 'error',
         'no-useless-catch': 0,
-        quotes: ['error', 'single', { allowTemplateLiterals: true }]
+        quotes: ['error', 'single', { allowTemplateLiterals: true }],
+        '@typescript-eslint/ban-types': 'off', // to avoid issues with global types
+        '@typescript-eslint/no-namespace': 'off' // disable if using namespaces as above
     }
 })

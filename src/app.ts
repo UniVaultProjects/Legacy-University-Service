@@ -4,8 +4,17 @@ import globalErrorHandler from './middleware/globalErrorHandler'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import session from 'express-session'
+import { UserDetail } from './types/user-detail'
 
 const app: Application = express()
+
+declare global {
+    namespace Express {
+        interface Request {
+            user_details?: UserDetail; // Ensure this is the correct type
+        }
+    }
+}
 
 // Middleware
 // Use cookie-parser middleware to parse cookies
