@@ -1,4 +1,5 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from 'express'
+import { UserType } from '../enum/user-type'
 
 /*
 
@@ -11,20 +12,19 @@ import { Request, Response, NextFunction } from 'express';
 
 */
 
-function checkUserHandler(user: 'ADMIN' | 'MANAGER') {
-  // eslint-disable-next-line @typescript-eslint/require-await
-  return async function (req: Request, res: Response, next: NextFunction) {
-    try {
-      // double typo checking ensures that req.user object exists .
-      if (req.user && req.user['user-type'] === user) {
-        next();
-      } else {
-        res.status(403).send('Access Denied!'); // Use 403 for forbidden access
-      }
-    } catch (error) {
-      throw error;
+function checkUserHandler(user: UserType) {
+    return function (req: Request, res: Response, next: NextFunction) {
+        try {
+            // double typo checking ensures that req.user object exists .
+            if (req.user_details && req.user_details.user_type === user) {
+                next()
+            } else {
+                res.status(403).send('Access Denied!') // TODO:Use 403 for forbidden access
+            }
+        } catch (error) {
+            throw error
+        }
     }
-  };
 }
 
-export default checkUserHandler;
+export default checkUserHandler

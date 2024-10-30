@@ -3,7 +3,9 @@ import { Request, Response, NextFunction } from 'express'
 import httpResponse from '../../utils/httpResponse'
 import httpError from '../../utils/httpError'
 import responseMessage from '../../constant/responseMessage'
-import { PrismaClient, Prisma } from '@prisma/client'
+import { PrismaClient, Prisma, Institute } from '@prisma/client'
+import { UserType } from '../../enum/user-type'
+import { Allow } from '../../enum/permissions-allowed'
 
 const prisma = new PrismaClient()
 
@@ -33,23 +35,28 @@ export default {
 
     InstituteGet: async (req: Request<{}, {}, GetInstituteRequestBody>, res: Response, next: NextFunction) => {
         try {
-            // finds all the data in Institute
-            // can only view that institue for which permission has been granted.
-            //  const grantedPermissions = req.ops
-            // destructuring req.body.id
-
-            const allowedInstitutes: string[] = req.InstituteIds as string[]
-
-            const get = await prisma.institute.findMany({
-                where: {
-                    id: {
-                        in: allowedInstitutes
+            let institutes: Institute[] = []
+            if (req.user_details.user_type == UserType.admin) {
+                // For admin
+                const response = await prisma.institute.findMany({})
+                institutes = response
+            } else if (req.user_details.user_type == UserType.manager) {
+                // For manager
+                const instituteIds: string[] = req.user_details.permissions.institutes
+                    .filter((rule) => rule.allow.includes(Allow.read))
+                    .map((rule) => rule.id)
+                const response = await prisma.institute.findMany({
+                    where: {
+                        id: {
+                            in: instituteIds
+                        }
                     }
-                }
-            })
+                })
+                institutes = response
+            }
 
             // Success Response.
-            return httpResponse(req, res, 200, responseMessage.SUCCESS, get)
+            return httpResponse(req, res, 200, responseMessage.SUCCESS, institutes)
         } catch (error) {
             httpError(next, error, req, 500)
         }
@@ -126,4 +133,3 @@ export default {
         }
     }
 }
-
