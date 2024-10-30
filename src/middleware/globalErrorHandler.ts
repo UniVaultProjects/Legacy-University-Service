@@ -3,5 +3,5 @@ import { HttpError } from '../types/types';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default (err : HttpError, _ : Request,res : Response , __ : NextFunction)=>{
-    res.status(err.statusCode).json(err)
+    res.status(err.code).json(err)
 }
