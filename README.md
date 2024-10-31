@@ -1,8 +1,12 @@
+Here’s a revised version of your documentation with improved clarity and formatting:
+
+---
+
 # UniVault Notes Service
 
 ### Installing Dependencies
 
-To install all the required dependencies and development dependencies for the Notes Adapter Fork UniVault project, you can use the following command:
+To install all required dependencies and development dependencies for the Notes Adapter Fork UniVault project, run the following command:
 
 ```bash
 npm run install:all
@@ -16,7 +20,7 @@ This project uses a `.env.dev` file to manage configuration settings. Below is t
 
 Create a `.env.dev` file in the root of your project with the following content:
 
-```
+```plaintext
 # General
 ENV=development
 PORT=XXXX
@@ -26,31 +30,31 @@ SERVER_URL=http://localhost:PORT
 AUTH_URL=http://localhost:PORT/URL
 ```
 
-## Database Connection
+### Database Connection
 
 To connect your application to the database, you need to configure the `DATABASE_URL` environment variable. This variable specifies the connection string for your database.
 
-### Configuration
+#### Configuration
 
 Add the following line to your `.env` file in the root of your project:
 
 ```plaintext
 DATABASE_URL=<your-database-connection-string>
-
 ```
 
-## Building TypeScript
+### Building TypeScript
 
-To compile your TypeScript files, you can use the TypeScript compiler (`tsc`). You can run it directly using `npx`, which executes the binary without installing it globally.
+To compile your TypeScript files, use the TypeScript compiler (`tsc`). You can run it directly using `npx`, which executes the binary without installing it globally.
 
-### Using `npx tsc`
+#### Using `npx tsc`
 
 Run the following command to build your TypeScript files:
 
 ```bash
 npx tsc
 ```
- ## Running the Project
+
+### Running the Project
 
 To start the development server, use the following command:
 
@@ -58,44 +62,14 @@ To start the development server, use the following command:
 npm run dev
 ```
 
-### Important :  Modifying Type Definitions for Express
+### Generating Prisma Client & Schema Generation
 
-To customize the type definitions for Express in your project, follow these steps:
+To generate the required schema and Prisma client, run the following command:
 
-1. **Locate the Type Definitions**:
-   Navigate to the `node_modules/@types/express` directory in your project.
-
-2. **Edit `index.d.ts`**:
-   Open the `index.d.ts` file within the `express` folder.
-
-3. **Add Custom Code**:
-   Insert the following code at the top of the file:
-
-   ```typescript
-   import * as express from "express";
-
-   declare global {
-       namespace Express {
-           interface Request {
-               ops: {
-                   id: string;
-                   allow: string[];
-                   map: any;
-               };
-
-               user: {
-                   'user-type': string;
-               };
-           }
-       };
-   }
-
-   ```
-   
-### Generate Prisma Client & Schema generation
-
-to generate required schema this command is required
-   
 ```bash
 npx prisma generate
 ```
+
+---
+
+Feel free to adjust any specific wording or details as needed!
