@@ -9,7 +9,6 @@ import { Allow } from '../../enum/permissionAllowed'
 
 const prisma = new PrismaClient()
 
-
 interface PostInstituteRequestBody {
     name: string
     short_name: string
@@ -32,9 +31,9 @@ export default {
 
     InstituteGet: async (req: Request, res: Response, next: NextFunction) => {
         try {
-            if(!req.user_details){
-                throw new Error('Something went wrong!');
-            };
+            if (!req.user_details) {
+                throw new Error('Something went wrong!')
+            }
 
             let institutes: Institute[] = []
             if (req.user_details.user_type == UserType.admin) {
@@ -134,3 +133,4 @@ export default {
         }
     }
 }
+

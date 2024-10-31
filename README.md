@@ -1,4 +1,3 @@
-Here’s a revised version of your documentation with improved clarity and formatting:
 
 ---
 
@@ -34,7 +33,7 @@ AUTH_URL=http://localhost:PORT/URL
 
 To connect your application to the database, you need to configure the `DATABASE_URL` environment variable. This variable specifies the connection string for your database.
 
-#### Configuration
+### Configuration
 
 Add the following line to your `.env` file in the root of your project:
 
@@ -72,4 +71,3 @@ npx prisma generate
 
 ---
 
-Feel free to adjust any specific wording or details as needed!
