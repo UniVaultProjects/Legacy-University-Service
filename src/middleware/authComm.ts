@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express'
 import axios, { HttpStatusCode } from 'axios'
 import config from '../config/config'
 import { AuthServiceResponse } from '../types/AuthServiceResponse'
-import { UserDetail } from '../types/user-detail'
+import { UserDetail } from '../types/userDetails'
 
 export default {
     verifyToken: async (req: Request, res: Response, next: NextFunction): Promise<void> => {

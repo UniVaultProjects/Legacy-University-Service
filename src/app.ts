@@ -4,7 +4,7 @@ import globalErrorHandler from './middleware/globalErrorHandler'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import session from 'express-session'
-import { UserDetail } from './types/user-detail'
+import { UserDetail } from './types/userDetails'
 
 const app: Application = express()
 
