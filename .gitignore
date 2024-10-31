@@ -7,3 +7,5 @@ node_modules
 
 #Ignore JS Build
 dist
+
+.vscode/settings.json
