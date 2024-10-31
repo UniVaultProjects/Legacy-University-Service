@@ -1,4 +1,4 @@
-import { UserType } from '../enum/user-type'
+import { UserType } from '../enum/userType'
 import { Rule } from './rule'
 
 export type UserDetail = {

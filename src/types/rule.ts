@@ -1,4 +1,4 @@
-import { Allow } from '../enum/permissions-allowed'
+import { Allow } from '../enum/permissionAllowed'
 
 export type Rule = {
     id: string

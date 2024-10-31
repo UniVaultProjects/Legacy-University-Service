@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import { UserType } from '../enum/user-type'
+import { UserType } from '../enum/userType'
 
 /*
 

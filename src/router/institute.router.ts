@@ -3,7 +3,7 @@ import instituteController from '../controller/Institute/instituteController'
 import authComm from '../middleware/authComm'
 import instituteValid from '../validation/institute.valid'
 import checkUserHandler from '../middleware/checkUser'
-import { UserType } from '../enum/user-type'
+import { UserType } from '../enum/userType'
 
 // Create a new router instance for handling institution-related routes
 const router = Router()

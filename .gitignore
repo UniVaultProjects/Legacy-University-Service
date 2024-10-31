@@ -3,7 +3,6 @@ node_modules
 
 #Ignore Env
 .env
-.env.dev
 
 #Ignore JS Build
 dist

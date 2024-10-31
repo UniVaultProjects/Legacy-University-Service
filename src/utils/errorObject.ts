@@ -1,5 +1,5 @@
 import { Request } from 'express'; // Import the Request type from Express
-import { HttpError } from '../types/types'; // Import custom HttpError type
+import { HttpError } from '../types/httpTypes'; // Import custom HttpError type
 import responseMessage from '../constant/responseMessage'; // Import response messages
 
 // Default export function for error handling

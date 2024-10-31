@@ -4,8 +4,8 @@ import httpResponse from '../../utils/httpResponse'
 import httpError from '../../utils/httpError'
 import responseMessage from '../../constant/responseMessage'
 import { PrismaClient, Prisma, Institute } from '@prisma/client'
-import { UserType } from '../../enum/user-type'
-import { Allow } from '../../enum/permissions-allowed'
+import { UserType } from '../../enum/userType'
+import { Allow } from '../../enum/permissionAllowed'
 
 const prisma = new PrismaClient()
 

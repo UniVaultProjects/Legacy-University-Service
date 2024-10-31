@@ -1,4 +1,4 @@
 export default {
-   SUCCESS : `Operation Successful`,
+   SUCCESS : `Success`,
    SOMETHING_WENT_WRONG : `Something Went Wrong`
 }

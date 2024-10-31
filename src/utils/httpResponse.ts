@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'; // Import necessary types from Express
-import { HttpResponse } from '../types/types'; // Import custom HttpResponse type
+import { HttpResponse } from '../types/httpTypes'; // Import custom HttpResponse type
 
 // Default export function to send HTTP responses
 export default (_: Request, res: Response, responseCode: number, responseMessage: string, data: unknown = null): void => {
