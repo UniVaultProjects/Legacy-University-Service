@@ -3,6 +3,7 @@ import axios, { HttpStatusCode } from 'axios'
 import config from '../config/config'
 import { AuthServiceResponse } from '../types/AuthServiceResponse'
 import { UserDetail } from '../types/userDetails'
+import { HttpResponse } from '../types/httpTypes'
 
 export default {
     verifyToken: async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -10,13 +11,24 @@ export default {
             // Header check
             const authHeader = req.headers['authorization']
             if (!authHeader) {
-                res.status(401).json({ error: 'Unauthorized ' }) // #TODO: Add Error Object
+                const body: HttpResponse = {
+                    code: HttpStatusCode.Unauthorized,
+                    message: 'Unauthorized!',
+                    data: {}
+                }
+                res.status(body.code).json(body)
                 return
             }
+
             // Extract token
             const authWithBearer = authHeader.split(' ')
             if (authWithBearer.length < 2) {
-                res.status(HttpStatusCode.BadRequest).json({ error: 'Unauthorized ' }) // #TODO: Add Error Object
+                const body: HttpResponse = {
+                    code: HttpStatusCode.BadRequest,
+                    message: 'Unauthorized!',
+                    data: {}
+                }
+                res.status(body.code).json(body)
                 return
             }
             const token = authWithBearer[1]
@@ -41,8 +53,41 @@ export default {
             // Control over to next middleware or Controller.
             next()
         } catch (error) {
-            // TODO: Handle error
-            throw error
+            // Check for axios error
+            if (axios.isAxiosError<AuthServiceResponse<unknown>>(error)) {
+                let body: HttpResponse
+                if (error.response) {
+                    // Server responded with a status other than 2xx
+                    body = {
+                        code: error.response.data.code,
+                        message: error.response.data.message,
+                        data: {}
+                    }
+                } else if (error.request) {
+                    // No response was received from the server
+                    body = {
+                        code: HttpStatusCode.InternalServerError,
+                        message: 'Service Unavailable',
+                        data: {}
+                    }
+                } else {
+                    // Error setting up the request
+                    body = {
+                        code: HttpStatusCode.InternalServerError,
+                        message: 'Internal Server Error',
+                        data: {}
+                    }
+                }
+                res.status(body.code).json(body)
+            } else {
+                // Handle non-Axios errors
+                const body: HttpResponse = {
+                    code: HttpStatusCode.InternalServerError,
+                    message: 'Internal Server Error',
+                    data: {}
+                }
+                res.status(body.code).json(body)
+            }
         }
     }
 }
