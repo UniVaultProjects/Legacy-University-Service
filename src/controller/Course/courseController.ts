@@ -30,9 +30,9 @@ export default {
                 instituteId
             }
 
-            const post = await prisma.course.create({
+            const post: IPostCourseRequestBody = (await prisma.course.create({
                 data: courseData
-            })
+            })) as IPostCourseRequestBody
 
             httpResponse(req, res, 200, responseMessage.SUCCESS, post)
         } catch (error) {
