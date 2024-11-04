@@ -49,7 +49,7 @@ export default {
 
                 if (error.code === 'P2002') {
                     const body: HttpResponse = {
-                        code: HttpStatusCode.BadRequest,
+                        code: HttpStatusCode.Conflict,
                         message: 'A course with the same name or short name already exists.',
                         data: {}
                     }

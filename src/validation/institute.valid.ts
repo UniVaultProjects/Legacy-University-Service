@@ -6,7 +6,7 @@ import Joi from 'joi' // Import Joi for data validation
 interface requestBody {
     name: string // Required: name of the item
     short_name: string // Required: short name for the item
-    desc: string // Required: description of the item
+    description: string // Required: description of the item
     order_no: number // Required: order number (integer)
 }
 
@@ -40,7 +40,7 @@ export default {
         req.body = {
             name: req.body.name,
             short_name: req.body.short_name,
-            desc: req.body.desc,
+            description: req.body.description,
             order_no: req.body.order_no
         } as requestBody
 

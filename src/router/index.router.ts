@@ -5,7 +5,7 @@ import courseRouter from '../router/course.router'
 const indexRouter = Router()
 
 // Requires token verification and validation
-indexRouter.use('/institutes',instituteRouter);
-indexRouter.use('/courses',courseRouter);
+indexRouter.use('/institute',instituteRouter);
+indexRouter.use('/course',courseRouter);
 
 export default indexRouter
