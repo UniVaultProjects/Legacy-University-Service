@@ -6,6 +6,8 @@ import responseMessage from '../../constant/responseMessage'
 import { PrismaClient, Prisma, Institute } from '@prisma/client'
 import { UserType } from '../../enum/userType'
 import { Allow } from '../../enum/permissionAllowed'
+import { HttpResponse } from '../../types/httpTypes'
+import { HttpStatusCode } from 'axios'
 
 const prisma = new PrismaClient()
 
@@ -65,16 +67,7 @@ export default {
     // Create institute
     InstitutePost: async (req: Request<{}, {}, NonNullable<PostInstituteRequestBody>>, res: Response, next: NextFunction): Promise<void> => {
         try {
-            // Here you would typically save `post` to the database
-            // await Institute Create(post);
-
             const { name, short_name, desc, order_no } = req.body
-
-            // Validate input values
-            if (!name || !short_name || !desc || order_no === undefined) {
-                res.status(400).json({ error: 'All fields are required' })
-                return
-            }
 
             // Prepare the institute data
             const instituteData = {
@@ -98,24 +91,12 @@ export default {
     // Delete institute
     InstituteDelete: async (req: Request<{}, {}, DeleteInstituteRequestBody>, res: Response, next: NextFunction): Promise<void> => {
         try {
-            // Here we will delete the object using objectID
-            // await Institute delete(id);
             const { id } = req.body
 
-            if (!id || typeof id !== 'string') {
-                res.status(400).json({ error: 'institute ID is required' })
-                return
-            }
-
-            // Find Object by id .
+            // Find Object by id
             const deletedInstitute = await prisma.institute.delete({
-                where: { id: id } // Specify Objectid and where condition.
+                where: { id: id }
             })
-
-            if (!deletedInstitute) {
-                res.status(400).json({ error: 'institute not found' })
-                return
-            }
 
             // Send a success response & deleted record.
             httpResponse(req, res, 200, responseMessage.SUCCESS, deletedInstitute)
@@ -124,8 +105,12 @@ export default {
             // Type assertion for error
             if (error instanceof Prisma.PrismaClientKnownRequestError) {
                 if (error.code === 'P2025') {
-                    // Record not found error
-                    res.status(400).json({ error: 'institute not found' })
+                    const body: HttpResponse = {
+                        code: HttpStatusCode.BadRequest,
+                        message: 'institute not found!',
+                        data: {}
+                    }
+                    res.status(body.code).json(body)
                     return
                 }
             }
