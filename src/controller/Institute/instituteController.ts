@@ -14,7 +14,7 @@ const prisma = new PrismaClient()
 interface PostInstituteRequestBody {
     name: string
     short_name: string
-    desc: string
+    description: string
     order_no: number
 }
 
@@ -67,18 +67,18 @@ export default {
     // Create institute
     InstitutePost: async (req: Request<{}, {}, NonNullable<PostInstituteRequestBody>>, res: Response, next: NextFunction): Promise<void> => {
         try {
-            const { name, short_name, desc, order_no } = req.body
+            const { name, short_name, description, order_no } = req.body
 
             // Prepare the institute data
             const instituteData = {
                 name, // Using the destructured variable
                 short_name, // Using the destructured variable
-                desc, // Using the destructured variable
+                description, // Using the destructured variable
                 order_no // Using the destructured variable
             }
 
             const post = await prisma.institute.create({
-                data: instituteData
+                data : instituteData
             })
 
             // Send a success response

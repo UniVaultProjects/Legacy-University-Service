@@ -1,5 +1,5 @@
 import express, { Application } from 'express'
-import routes from './router/institute.router'
+import routes from './router/index.router'
 import globalErrorHandler from './middleware/globalErrorHandler'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'

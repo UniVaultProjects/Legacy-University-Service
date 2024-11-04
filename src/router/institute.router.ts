@@ -6,21 +6,22 @@ import checkUserHandler from '../middleware/checkUser'
 import { UserType } from '../enum/userType'
 
 // Create a new router instance for handling institution-related routes
-const router = Router()
+const instituteRouter = Router()
 
 /* Routes for institutions */
 
 // Route to all a new institute
 // Requires token verification and validation
-router.route('/institute').get(authComm.verifyToken, checkUserHandler([UserType.admin,UserType.manager]), instituteController.InstituteGet)
+instituteRouter.route('/').get(authComm.verifyToken, checkUserHandler([UserType.admin,UserType.manager]), instituteController.InstituteGet)
 
 // Route to create a new institute
 // Requires token verification and validation
-router.route('/institute').post(authComm.verifyToken, checkUserHandler([UserType.admin]), instituteValid.post, instituteController.InstitutePost)
+instituteRouter.route('/').post(authComm.verifyToken, checkUserHandler([UserType.admin]), instituteValid.post, instituteController.InstitutePost)
 
 // Route to delete an existing institute
 // Requires token verification
-router.route('/institute').delete(authComm.verifyToken, checkUserHandler([UserType.admin]), instituteController.InstituteDelete)
+instituteRouter.route('/').delete(authComm.verifyToken, checkUserHandler([UserType.admin]), instituteController.InstituteDelete)
+
 
 // Export the router for use in other parts of the application
-export default router
+export default instituteRouter
