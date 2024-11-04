@@ -67,7 +67,7 @@ To generate the required schema and Prisma client, run the following command:
 
 ```bash
 
-npx prisma db pull
+npx prisma db push 
 npx prisma generate
 ```
 
