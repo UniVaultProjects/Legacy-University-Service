@@ -8,6 +8,7 @@ import { UserType } from '../../enum/userType'
 import { Allow } from '../../enum/permissionAllowed'
 import { HttpResponse } from '../../types/httpTypes'
 import { HttpStatusCode } from 'axios'
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
 
 const prisma = new PrismaClient()
 
@@ -88,6 +89,17 @@ export default {
             // Send a success response
             httpResponse(req, res, 200, responseMessage.SUCCESS, post)
         } catch (error) {
+            if(error instanceof PrismaClientKnownRequestError){
+                if (error.code === 'P2002') {
+                    const body: HttpResponse = {
+                        code: HttpStatusCode.Conflict,
+                        message: 'A institute with the same name or short name already exists.',
+                        data: {}
+                    }
+                    res.status(body.code).json(body)
+                    return
+                }
+            }
             httpError(next, error, req, 500)
         }
     },
