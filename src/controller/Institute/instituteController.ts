@@ -11,14 +11,14 @@ import { HttpStatusCode } from 'axios'
 
 const prisma = new PrismaClient()
 
-interface PostInstituteRequestBody {
+interface IPostInstituteRequestBody {
     name: string
     short_name: string
-    desc: string
+    description: string
     order_no: number
 }
 
-interface DeleteInstituteRequestBody {
+interface IDeleteInstituteRequestBody {
     id: string
 }
 
@@ -40,7 +40,11 @@ export default {
             let institutes: Institute[] = []
             if (req.user_details.user_type == UserType.admin) {
                 // For admin
-                const response = await prisma.institute.findMany({})
+                const response = await prisma.institute.findMany({
+                    include: {
+                        courses: true
+                    }
+                })
                 institutes = response
             } else if (req.user_details.user_type == UserType.manager) {
                 // For manager
@@ -65,15 +69,15 @@ export default {
     },
 
     // Create institute
-    InstitutePost: async (req: Request<{}, {}, NonNullable<PostInstituteRequestBody>>, res: Response, next: NextFunction): Promise<void> => {
+    InstitutePost: async (req: Request<{}, {}, NonNullable<IPostInstituteRequestBody>>, res: Response, next: NextFunction): Promise<void> => {
         try {
-            const { name, short_name, desc, order_no } = req.body
+            const { name, short_name, description, order_no } = req.body
 
             // Prepare the institute data
-            const instituteData = {
+            const instituteData: IPostInstituteRequestBody = {
                 name, // Using the destructured variable
                 short_name, // Using the destructured variable
-                desc, // Using the destructured variable
+                description, // Using the destructured variable
                 order_no // Using the destructured variable
             }
 
@@ -89,7 +93,7 @@ export default {
     },
 
     // Delete institute
-    InstituteDelete: async (req: Request<{}, {}, DeleteInstituteRequestBody>, res: Response, next: NextFunction): Promise<void> => {
+    InstituteDelete: async (req: Request<{}, {}, IDeleteInstituteRequestBody>, res: Response, next: NextFunction): Promise<void> => {
         try {
             const { id } = req.body
 
@@ -118,3 +122,4 @@ export default {
         }
     }
 }
+

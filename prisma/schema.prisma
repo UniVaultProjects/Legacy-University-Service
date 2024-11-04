@@ -20,6 +20,18 @@ model Institute {
   id          String    @id @default(auto()) @map("_id") @db.ObjectId // Unique identifier, auto-generated ObjectId
   name        String    // Name of the institute
   short_name  String    // Short name of the institute
-  desc        String    // Description of the institute
+  description String    // Description of the institute
   order_no    Int       // Order number for sorting
+  courses     Course[]  @relation("InstituteCourses") // Relationship with courses
+}
+
+// Model definition for the Course entity
+model Course {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId // Unique identifier, auto-generated ObjectId
+  name        String    @unique // Title of the course
+  short_name  String    @unique // Short name of the Course
+  description String    // Description of the course
+  order_no    Int       // Order number for sorting
+  instituteId String    @map("institute_id") // Foreign key for the Institute
+  institute   Institute @relation("InstituteCourses", fields: [instituteId], references: [id]) // Relationship to the Institute
 }

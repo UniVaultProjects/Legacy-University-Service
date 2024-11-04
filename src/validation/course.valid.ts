@@ -8,6 +8,7 @@ interface requestBody {
     short_name: string // Required: short name for the item
     description: string // Required: description of the item
     order_no: number // Required: order number (integer)
+    instituteId: string // Requires : InstituteId for associativity.
 }
 
 // Export the validation middleware
@@ -23,7 +24,8 @@ export default {
             name: Joi.string().min(3).max(75).required(), // Name must be a string between 3 and 75 characters
             short_name: Joi.string().required(), // Short name must be a string
             description: Joi.string().required(), // Description must be a string
-            order_no: Joi.number().integer().required() // Order number must be a required integer
+            order_no: Joi.number().integer().required(), // Order number must be a required integer
+            instituteId: Joi.string().required() // InstituteId must be a string
         })
 
         // Destructure the request body to extract relevant fields
@@ -41,7 +43,8 @@ export default {
             name: req.body.name,
             short_name: req.body.short_name,
             description: req.body.description,
-            order_no: req.body.order_no
+            order_no: req.body.order_no,
+            instituteId: req.body.instituteId
         } as requestBody
 
         // Call the next middleware in the stack
