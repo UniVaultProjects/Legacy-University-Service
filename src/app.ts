@@ -5,6 +5,7 @@ import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import session from 'express-session'
 import { UserDetail } from './types/userDetails'
+import endpointLogger from './middleware/endpointLogger'
 
 const app: Application = express()
 
@@ -43,7 +44,7 @@ app.use(
         credentials: true // Allow cookies to be sent with requests
     })
 )
-
+app.use(endpointLogger.logger);
 // Router
 app.use('/api', routes)
 
