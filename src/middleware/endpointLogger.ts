@@ -28,6 +28,7 @@ export default {
             const start = Date.now() // Start time for latency calculation
             const method = req.method
             const url = req.originalUrl
+            const statusCode = res.statusCode
 
             // Color code the HTTP method and status code
             const methodColor = method === 'GET' ? chalk.green : chalk.yellow // GET in green, POST in yellow
@@ -41,9 +42,11 @@ export default {
             res.on('finish', () => {
                 const latency = Date.now() - start // Latency in milliseconds
                 const timeStamp = getFormattedTimestamp()
-                const statusCode = res.statusCode
+
                 // eslint-disable-next-line no-console
-                console.log( `[${chalk.blue(timeStamp)}] ${methodColor(method)} ${url} - Status: ${statusColor(statusCode)} - Latency: ${chalk.bold(latency + 'ms')}`)
+                console.log(
+                    `[${chalk.blue(timeStamp)}] ${methodColor(method)} ${url} - Status: ${statusColor(statusCode)} - Latency: ${chalk.bold(latency + 'ms')}`
+                )
             })
 
             next() // Pass control to the next middleware or route handler

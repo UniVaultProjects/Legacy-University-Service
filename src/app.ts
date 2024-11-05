@@ -44,9 +44,10 @@ app.use(
         credentials: true // Allow cookies to be sent with requests
     })
 )
-app.use(endpointLogger.logger);
 // Router
 app.use('/api', routes)
+
+app.use(endpointLogger.logger);
 
 // Global Error Handler
 app.use(globalErrorHandler)
