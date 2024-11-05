@@ -1,5 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 import httpError from '../utils/httpError'
+import chalk from 'chalk'
+
 // Helper function to format date in 12-hour format with AM/PM
 function getFormattedTimestamp() {
     const now = new Date()
@@ -27,11 +29,21 @@ export default {
             const method = req.method
             const url = req.originalUrl
 
+            // Color code the HTTP method and status code
+            const methodColor = method === 'GET' ? chalk.green : chalk.yellow // GET in green, POST in yellow
+            const statusColor = (status : number) => {
+                if (status >= 200 && status < 300) return chalk.green(status) // 2xx status in green
+                if (status >= 300 && status < 400) return chalk.cyan(status) // 3xx status in cyan
+                if (status >= 400 && status < 500) return chalk.red(status) // 4xx status in red
+                return chalk.magenta(status) // 5xx status in magenta
+            }
+
             res.on('finish', () => {
                 const latency = Date.now() - start // Latency in milliseconds
                 const timeStamp = getFormattedTimestamp()
+                const statusCode = res.statusCode
                 // eslint-disable-next-line no-console
-                console.info(`[${timeStamp}] ${method} ${url} - Latency: ${latency}ms`)
+                console.log( `[${chalk.blue(timeStamp)}] ${methodColor(method)} ${url} - Status: ${statusColor(statusCode)} - Latency: ${chalk.bold(latency + 'ms')}`)
             })
 
             next() // Pass control to the next middleware or route handler
