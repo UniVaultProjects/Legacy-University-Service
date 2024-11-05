@@ -3,19 +3,23 @@ import httpResponse from '../utils/httpResponse' // Import custom HTTP response 
 import Joi from 'joi' // Import Joi for data validation
 
 // Define the structure for the request body
-interface requestBody {
+interface IrequestBody {
     name: string // Required: name of the item
     short_name: string // Required: short name for the item
     description: string // Required: description of the item
     order_no: number // Required: order number (integer)
-    instituteId: string // Requires : InstituteId for associativity.
+    institute: {
+        connect: {
+            id: string
+        }
+    }
 }
 
 // Export the validation middleware
 export default {
     post: (
         // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-        req: Request<{}, {}, requestBody>, // Define the request type with an empty params and query
+        req: Request<{}, {}, IrequestBody>, // Define the request type with an empty params and query
         res: Response, // Response type
         next: NextFunction // Next middleware function
     ) => {
@@ -25,7 +29,9 @@ export default {
             short_name: Joi.string().required(), // Short name must be a string
             description: Joi.string().required(), // Description must be a string
             order_no: Joi.number().integer().required(), // Order number must be a required integer
-            instituteId: Joi.string().required() // InstituteId must be a string
+            institute: Joi.optional(), // InstituteId must be a string
+            connect: Joi.optional(),
+            id: Joi.string().optional()
         })
 
         // Destructure the request body to extract relevant fields
@@ -38,14 +44,13 @@ export default {
             return httpResponse(req, res, 400, error.message)
         }
 
-        // If validation is successful, attach the validated data back to the req object
         req.body = {
             name: req.body.name,
             short_name: req.body.short_name,
             description: req.body.description,
             order_no: req.body.order_no,
-            instituteId: req.body.instituteId
-        } as requestBody
+            institute: req.body.institute
+        } as IrequestBody
 
         // Call the next middleware in the stack
         next()
