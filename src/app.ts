@@ -5,7 +5,7 @@ import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import session from 'express-session'
 import { UserDetail } from './types/userDetails'
-import endpointLogger from './middleware/endpointLogger'
+import morgan from 'morgan'
 
 const app: Application = express()
 
@@ -24,7 +24,11 @@ declare global {
 app.use(express.json())
 app.use(cookieParser())
 
-app.use(
+// Set up morgan to log all requests with the 'dev' format
+ 
+app.use(morgan('dev'));
+
+app.use( 
     session({
         secret: 'your_secret_key', // Change this to a secure random string
         resave: false,
@@ -47,7 +51,9 @@ app.use(
 // Router
 app.use('/api', routes)
 
-app.use(endpointLogger.logger);
+ 
+app.use(morgan(':method :url :status :response-time ms - :res[content-length]'));
+
 
 // Global Error Handler
 app.use(globalErrorHandler)
