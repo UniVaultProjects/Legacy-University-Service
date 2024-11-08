@@ -16,7 +16,7 @@ instituteRouter.route('/').get(authComm.verifyToken, checkUserHandler([UserType.
 
 // Route to create a new institute
 // Requires token verification and validation
-instituteRouter.route('/').post(authComm.verifyToken, checkUserHandler([UserType.admin]), instituteValid.post, instituteController.InstitutePost)
+instituteRouter.route('/').post(authComm.verifyToken, checkUserHandler([UserType.admin,UserType.manager]), instituteValid.post, instituteController.InstitutePost)
 
 // Route to delete an existing institute
 // Requires token verification

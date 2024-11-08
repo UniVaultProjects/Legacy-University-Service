@@ -28,6 +28,7 @@ export default {
         try {
             if (!req.user_details) {
                 httpError(next, responseMessage.SOMETHING_WENT_WRONG, req, 500)
+                return 
             }
             let courses: Course[] = []
 
@@ -81,7 +82,7 @@ export default {
             const post = await prisma.course.create({
                 data: courseData
             })
-
+            
             httpResponse(req, res, 200, responseMessage.SUCCESS, post)
         } catch (error) {
             if (error instanceof Prisma.PrismaClientKnownRequestError) {
