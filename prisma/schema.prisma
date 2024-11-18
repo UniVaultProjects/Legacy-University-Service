@@ -34,4 +34,16 @@ model Course {
   order_no    Int       @unique // Order number for sorting
   instituteId String    @map("institute_id") // Foreign key for the Institute
   institute   Institute @relation("InstituteCourses", fields: [instituteId], references: [id]) // Relationship to the Institute
+  branches    Branch[]  @relation("CourseBranches") // One-to-many relationship with Branches
+}
+
+// Model definition for the Branch entity
+model Branch {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId // Unique identifier, auto-generated ObjectId
+  name        String    @unique // Title of the branch
+  short_name  String    @unique // Short name of the Branch
+  description String    // Description of the branch
+  order_no    Int       @unique // Order number for sorting
+  courseId    String    @map("course_id") // Foreign key for the Course
+  course      Course    @relation("CourseBranches", fields: [courseId], references: [id]) // Relationship to the Course
 }

@@ -9,35 +9,27 @@ import { HttpStatusCode } from 'axios'
 import { UserType } from '../../enum/userType'
 import { Allow } from '../../enum/permissionAllowed'
 
+import { IPostRequestBody, IDeleteRequestBody, IUpdateRequestBody } from '../../interfaces/course.interface'
+
 const prisma = new PrismaClient()
 
-interface IPostCourseRequestBody {
-    name: string
-    short_name: string
-    description: string
-    order_no: number
-    institute: {
-        connect: {
-            id: string
-        }
-    }
-}
-
 export default {
-    CourseGet: async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    get: async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
             if (!req.user_details) {
                 httpError(next, responseMessage.SOMETHING_WENT_WRONG, req, 500)
+                return
             }
             let courses: Course[] = []
 
             if (req.user_details?.user_type == UserType.admin) {
-
-                const response = await prisma.course.findMany({})
+                const response = await prisma.course.findMany({ 
+                    include : {
+                        branches : true
+                    }
+                })
                 courses = response
-
             } else if (req.user_details?.user_type == UserType.manager) {
-
                 const courseIds: string[] = req.user_details.permissions.courses
                     .filter((rule) => rule.allow.includes(Allow.read))
                     .map((rule) => rule.id)
@@ -50,12 +42,12 @@ export default {
                 })
                 courses = response
             }
-            return httpResponse(req, res, 200, responseMessage.SUCCESS, courses)
+            return httpResponse(res, 200, responseMessage.SUCCESS, courses)
         } catch (error) {
             throw error
         }
     },
-    CoursePost: async (req: Request<{}, {}, NonNullable<IPostCourseRequestBody>>, res: Response, next: NextFunction): Promise<void> => {
+    post: async (req: Request<{}, {}, NonNullable<IPostRequestBody>>, res: Response, next: NextFunction): Promise<void> => {
         try {
             const { name, short_name, description, order_no, institute } = req.body
 
@@ -82,7 +74,7 @@ export default {
                 data: courseData
             })
 
-            httpResponse(req, res, 200, responseMessage.SUCCESS, post)
+            httpResponse(res, 200, responseMessage.SUCCESS, post)
         } catch (error) {
             if (error instanceof Prisma.PrismaClientKnownRequestError) {
                 if (error.code === 'P2003') {
@@ -99,6 +91,72 @@ export default {
                     const body: HttpResponse = {
                         code: HttpStatusCode.Conflict,
                         message: 'A course with the same name or short name already exists.',
+                        data: {}
+                    }
+                    res.status(body.code).json(body)
+                    return
+                }
+            }
+            httpError(next, error, req, 500)
+        }
+    },
+    // Delete institute
+    delete: async (req: Request<{}, {}, IDeleteRequestBody>, res: Response, next: NextFunction): Promise<void> => {
+        try {
+            const { id } = req.body
+
+            // Find Object by id
+            const deletedInstitute = await prisma.course.delete({
+                where: { id: id }
+            })
+
+            // Send a success response & deleted record.
+            httpResponse(res, 200, responseMessage.SUCCESS, deletedInstitute)
+        } catch (error) {
+            // If the record is not found, Prisma throws an error
+            // Type assertion for error
+            if (error instanceof Prisma.PrismaClientKnownRequestError) {
+                if (error.code === 'P2025') {
+                    const body: HttpResponse = {
+                        code: HttpStatusCode.BadRequest,
+                        message: 'institute not found!',
+                        data: {}
+                    }
+                    res.status(body.code).json(body)
+                    return
+                }
+            }
+            httpError(next, error, req, 500)
+        }
+    },
+    // Update institute
+    update: async (req: Request<{}, {}, IUpdateRequestBody>, res: Response, next: NextFunction): Promise<void> => {
+        try {
+            const { id, name, short_name, description, order_no } = req.body
+
+            // Find Object by id
+            const updateInstitute = await prisma.institute.update({
+                where: {
+                    id: id
+                },
+                data: {
+                    name,
+                    short_name,
+                    description,
+                    order_no
+                }
+            })
+
+            // Send a success response & deleted record.
+            httpResponse(res, 200, responseMessage.SUCCESS, updateInstitute)
+        } catch (error) {
+            // If the record is not found, Prisma throws an error
+            // Type assertion for error
+            if (error instanceof Prisma.PrismaClientKnownRequestError) {
+                if (error.code === 'P2025') {
+                    const body: HttpResponse = {
+                        code: HttpStatusCode.BadRequest,
+                        message: 'institute not found!',
                         data: {}
                     }
                     res.status(body.code).json(body)

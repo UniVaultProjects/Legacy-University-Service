@@ -1,8 +1,8 @@
-import { Request, Response } from 'express'; // Import necessary types from Express
+import {Response } from 'express'; // Import necessary types from Express
 import { HttpResponse } from '../types/httpTypes'; // Import custom HttpResponse type
 
 // Default export function to send HTTP responses
-export default (_: Request, res: Response, responseCode: number, responseMessage: string, data: unknown = null): void => {
+export default (res: Response, responseCode: number, responseMessage: string, data: unknown = null): void => {
     // Construct the response object
     const response: HttpResponse = {
         code: responseCode, // Set the HTTP status code

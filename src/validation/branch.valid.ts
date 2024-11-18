@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express' // Import necessary types from Express
 import httpResponse from '../utils/httpResponse' // Import custom HTTP response utility
 import Joi from 'joi' // Import Joi for data validation
-import {IUpdateRequestBody,IDeleteRequestBody,IPostRequestBody,ValidationErrorResponse} from '../interfaces/institute.interfaces'
+import { IUpdateRequestBody, IDeleteRequestBody, IPostRequestBody, ValidationErrorResponse } from '../interfaces/branch.interface'
 
 // Export the validation middleware
 export default {
@@ -17,7 +17,12 @@ export default {
                 name: Joi.string().min(3).max(75).required(), // Name must be a string between 3 and 75 characters
                 short_name: Joi.string().required(), // Short name must be a string
                 description: Joi.string().required(), // Description must be a string
-                order_no: Joi.number().integer().required() // Order number must be a required integer
+                order_no: Joi.number().integer().required(), // Order number must be a required integer
+                course: Joi.object({
+                    connect: Joi.object({
+                        id: Joi.string().length(24).required() // Institute ID must be a 24-character string
+                    }).required()
+                }).required() // Institute field must be provided
             })
 
             // Destructure the request body to extract relevant fields
@@ -35,8 +40,9 @@ export default {
                 name: req.body.name,
                 short_name: req.body.short_name,
                 description: req.body.description,
-                order_no: req.body.order_no
-            } as IUpdateRequestBody
+                order_no: req.body.order_no,
+                course: req.body.course
+            } as IPostRequestBody
 
             // Call the next middleware in the stack
             next()
@@ -62,7 +68,8 @@ export default {
                 name: Joi.string().min(3).max(75).required(), // Name must be a string between 3 and 75 characters
                 short_name: Joi.string().required(), // Short name must be a string
                 description: Joi.string().required(), // Description must be a string
-                order_no: Joi.number().integer().required() // Order number must be a required integer
+                order_no: Joi.number().integer().required(), // Order number must be a required integer
+                course: Joi.optional()
             })
 
             // Destructure the request body to extract relevant fields
@@ -81,7 +88,7 @@ export default {
                 short_name: req.body.short_name,
                 description: req.body.description,
                 order_no: req.body.order_no
-            } as IPostRequestBody
+            } as IUpdateRequestBody
 
             // Call the next middleware in the stack
             next()
