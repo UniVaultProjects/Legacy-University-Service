@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import instituteController from '../controller/Institute/instituteController'
+import instituteController from '../controller/institute/instituteController'
 import authComm from '../middleware/authComm'
 import instituteValid from '../validation/institute.valid'
 import checkUserHandler from '../middleware/checkUser'
@@ -12,15 +12,22 @@ const instituteRouter = Router()
 
 // Route to all a new institute
 // Requires token verification and validation
-instituteRouter.route('/').get(authComm.verifyToken, checkUserHandler([UserType.admin,UserType.manager]), instituteController.InstituteGet)
+instituteRouter.route('/').get(authComm.verifyToken, checkUserHandler([UserType.admin,UserType.manager]), instituteController.get)
 
 // Route to create a new institute
 // Requires token verification and validation
-instituteRouter.route('/').post(authComm.verifyToken, checkUserHandler([UserType.admin,UserType.manager]), instituteValid.post, instituteController.InstitutePost)
+instituteRouter.route('/').post(authComm.verifyToken, checkUserHandler([UserType.admin,UserType.manager]), instituteValid.post, instituteController.post)
 
 // Route to delete an existing institute
 // Requires token verification
-instituteRouter.route('/').delete(authComm.verifyToken, checkUserHandler([UserType.admin]), instituteController.InstituteDelete)
+instituteRouter.route('/').delete(authComm.verifyToken, checkUserHandler([UserType.admin]), instituteController.delete)
+
+
+// Route to delete an existing institute
+// Requires token verification
+instituteRouter.route('/').put(authComm.verifyToken, checkUserHandler([UserType.admin]), instituteController.update)
+
+
 
 
 // Export the router for use in other parts of the application

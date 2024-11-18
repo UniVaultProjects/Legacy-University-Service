@@ -9,19 +9,9 @@ import { Allow } from '../../enum/permissionAllowed'
 import { HttpResponse } from '../../types/httpTypes'
 import { HttpStatusCode } from 'axios'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
+import { IPostRequestBody, IUpdateRequestBody, IDeleteRequestBody } from '../../interfaces/institute.interfaces'
 
 const prisma = new PrismaClient()
-
-interface IPostInstituteRequestBody {
-    name: string
-    short_name: string
-    description: string
-    order_no: number
-}
-
-interface IDeleteInstituteRequestBody {
-    id: string
-}
 
 export default {
     /**
@@ -32,7 +22,7 @@ export default {
     only allowed operation [GET] and allowed institutes can be accesed.
    **/
 
-    InstituteGet: async (req: Request, res: Response, next: NextFunction) => {
+    get: async (req: Request, res: Response, next: NextFunction) => {
         try {
             if (!req.user_details) {
                 throw new Error('Something went wrong!')
@@ -63,19 +53,19 @@ export default {
             }
 
             // Success Response.
-            return httpResponse(req, res, 200, responseMessage.SUCCESS, institutes)
+            return httpResponse(res, 200, responseMessage.SUCCESS, institutes)
         } catch (error) {
             httpError(next, error, req, 500)
         }
     },
 
     // Create institute
-    InstitutePost: async (req: Request<{}, {}, NonNullable<IPostInstituteRequestBody>>, res: Response, next: NextFunction): Promise<void> => {
+    post: async (req: Request<{}, {}, NonNullable<IPostRequestBody>>, res: Response, next: NextFunction): Promise<void> => {
         try {
             const { name, short_name, description, order_no } = req.body
 
             // Prepare the institute data
-            const instituteData: IPostInstituteRequestBody = {
+            const instituteData: IPostRequestBody = {
                 name, // Using the destructured variable
                 short_name, // Using the destructured variable
                 description, // Using the destructured variable
@@ -87,9 +77,9 @@ export default {
             })
 
             // Send a success response
-            httpResponse(req, res, 200, responseMessage.SUCCESS, post)
+            httpResponse(res, 200, responseMessage.SUCCESS, post)
         } catch (error) {
-            if(error instanceof PrismaClientKnownRequestError){
+            if (error instanceof PrismaClientKnownRequestError) {
                 if (error.code === 'P2002') {
                     const body: HttpResponse = {
                         code: HttpStatusCode.Conflict,
@@ -105,17 +95,81 @@ export default {
     },
 
     // Delete institute
-    InstituteDelete: async (req: Request<{}, {}, IDeleteInstituteRequestBody>, res: Response, next: NextFunction): Promise<void> => {
+    delete: async (req: Request<{}, {}, IDeleteRequestBody>, res: Response, next: NextFunction): Promise<void> => {
         try {
             const { id } = req.body
 
+            // Start a transaction to ensure both operations are atomic
+            const result = await prisma.$transaction(async (prisma) => {
+                // First, check if any courses exist for the given institute
+                const existingCourses = await prisma.course.findMany({
+                    where: {
+                        instituteId: id
+                    }
+                })
+
+                if (existingCourses.length > 0) {
+                    // If courses exist, delete them
+                    await prisma.course.deleteMany({
+                        where: {
+                            instituteId: id
+                        }
+                    })
+                } else {
+                    // If no courses exist, skip the deletion of courses and proceed with deleting the institute
+                    // eslint-disable-next-line no-console
+                    console.error('No related courses found for the institute.')
+                }
+
+                // Now, delete the institute
+                const deletedInstitute = await prisma.institute.delete({
+                    where: {
+                        id: id
+                    }
+                })
+
+                // Return the result of the deleted institute
+                return deletedInstitute
+            })
+            // Send a success response & deleted record.
+            httpResponse(res, 200, responseMessage.SUCCESS, result)
+        } catch (error) {
+            // If the record is not found, Prisma throws an error
+            // Type assertion for error
+            if (error instanceof Prisma.PrismaClientKnownRequestError) {
+                if (error.code === 'P2025') {
+                    const body: HttpResponse = {
+                        code: HttpStatusCode.BadRequest,
+                        message: 'institute not found!',
+                        data: {}
+                    }
+                    res.status(body.code).json(body)
+                    return
+                }
+            }
+            httpError(next, error, req, 500)
+        }
+    },
+    // Delete institute
+    update: async (req: Request<{}, {}, IUpdateRequestBody>, res: Response, next: NextFunction): Promise<void> => {
+        try {
+            const { id, name, short_name, description, order_no } = req.body
+
             // Find Object by id
-            const deletedInstitute = await prisma.institute.delete({
-                where: { id: id }
+            const updateInstitute = await prisma.institute.update({
+                where: {
+                    id: id
+                },
+                data: {
+                    name,
+                    short_name,
+                    description,
+                    order_no
+                }
             })
 
             // Send a success response & deleted record.
-            httpResponse(req, res, 200, responseMessage.SUCCESS, deletedInstitute)
+            httpResponse(res, 200, responseMessage.SUCCESS, updateInstitute)
         } catch (error) {
             // If the record is not found, Prisma throws an error
             // Type assertion for error

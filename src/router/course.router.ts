@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import courseController from '../controller/Course/courseController'
+import courseController from '../controller/course/courseController'
 import courseValid from '../validation/course.valid'
 import checkUserHandler from '../middleware/checkUser'
 import authComm from '../middleware/authComm'
@@ -11,10 +11,10 @@ const courseRouter = Router()
 
 // Route to get a all course & allowed courses
 // Requires token verification and validation
-courseRouter.route('/').get(authComm.verifyToken, checkUserHandler([UserType.admin, UserType.manager]), courseController.CourseGet)
+courseRouter.route('/').get(authComm.verifyToken, checkUserHandler([UserType.admin, UserType.manager]), courseController.get)
 
 // Route to create a new course
 // Requires token verification and validation
-courseRouter.route('/').post(authComm.verifyToken, checkUserHandler([UserType.admin]), courseValid.post, courseController.CoursePost)
+courseRouter.route('/').post(authComm.verifyToken, checkUserHandler([UserType.admin]), courseValid.post, courseController.post)
 
 export default courseRouter
