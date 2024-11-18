@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express' // Import necessary types from Express
 import httpResponse from '../utils/httpResponse' // Import custom HTTP response utility
 import Joi from 'joi' // Import Joi for data validation
-import {IDeleteRequestBody,IPostRequestBody,IUpdateRequestBody,ValidationErrorResponse} from '../interfaces/course.interface'
+import { IUpdateRequestBody, IDeleteRequestBody, IPostRequestBody, ValidationErrorResponse } from '../interfaces/branch.interface'
 
 // Export the validation middleware
 export default {
@@ -17,8 +17,8 @@ export default {
                 name: Joi.string().min(3).max(75).required(), // Name must be a string between 3 and 75 characters
                 short_name: Joi.string().required(), // Short name must be a string
                 description: Joi.string().required(), // Description must be a string
-                order_no: Joi.number().integer().required(), // Order number must be a required integer,
-                institute: Joi.object({
+                order_no: Joi.number().integer().required(), // Order number must be a required integer
+                course: Joi.object({
                     connect: Joi.object({
                         id: Joi.string().length(24).required() // Institute ID must be a 24-character string
                     }).required()
@@ -41,7 +41,7 @@ export default {
                 short_name: req.body.short_name,
                 description: req.body.description,
                 order_no: req.body.order_no,
-                institute : req.body.institute
+                course: req.body.course
             } as IPostRequestBody
 
             // Call the next middleware in the stack
@@ -57,7 +57,7 @@ export default {
     },
     update: (
         // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-        req: Request<{}, {}, IUpdateRequestBody>, // Define the request type with an empty params and query
+        req: Request<{}, {}, IPostRequestBody>, // Define the request type with an empty params and query
         res: Response, // Response type
         next: NextFunction // Next middleware function
     ) => {
@@ -69,9 +69,8 @@ export default {
                 short_name: Joi.string().required(), // Short name must be a string
                 description: Joi.string().required(), // Description must be a string
                 order_no: Joi.number().integer().required(), // Order number must be a required integer
-                institute : Joi.string().optional()
+                course: Joi.optional()
             })
-
 
             // Destructure the request body to extract relevant fields
 

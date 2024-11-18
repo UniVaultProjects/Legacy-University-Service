@@ -23,7 +23,11 @@ export default {
             let courses: Course[] = []
 
             if (req.user_details?.user_type == UserType.admin) {
-                const response = await prisma.course.findMany({})
+                const response = await prisma.course.findMany({ 
+                    include : {
+                        branches : true
+                    }
+                })
                 courses = response
             } else if (req.user_details?.user_type == UserType.manager) {
                 const courseIds: string[] = req.user_details.permissions.courses
@@ -125,7 +129,7 @@ export default {
             httpError(next, error, req, 500)
         }
     },
-    // Delete institute
+    // Update institute
     update: async (req: Request<{}, {}, IUpdateRequestBody>, res: Response, next: NextFunction): Promise<void> => {
         try {
             const { id, name, short_name, description, order_no } = req.body
