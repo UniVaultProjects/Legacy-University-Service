@@ -43,7 +43,7 @@ export default {
             }
             return httpResponse(res, 200, responseMessage.SUCCESS, courses)
         } catch (error) {
-            throw error
+            httpError(next,error,req,400)
         }
     },
     post: async (req: Request<{}, {}, NonNullable<IPostRequestBody>>, res: Response, next: NextFunction): Promise<void> => {
