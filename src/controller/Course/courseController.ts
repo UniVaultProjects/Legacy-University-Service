@@ -15,23 +15,30 @@ const prisma = new PrismaClient()
 export default {
     get: async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
+            
             if (!req.user_details) {
                 httpError(next, responseMessage.SOMETHING_WENT_WRONG, req, 500)
                 return
             }
+
             let courses: Course[] = []
 
             if (req.user_details?.user_type == UserType.admin) {
+
                 const response = await prisma.course.findMany({
                     include: {
                         branches: true
                     }
                 })
+
                 courses = response
+
             } else if (req.user_details?.user_type == UserType.manager) {
+
                 const courseIds: string[] = req.user_details.permissions.courses
                     .filter((rule) => rule.allow.includes(Allow.read))
                     .map((rule) => rule.id)
+
                 const response = await prisma.course.findMany({
                     where: {
                         id: {
@@ -39,6 +46,7 @@ export default {
                         }
                     }
                 })
+
                 courses = response
             }
             return httpResponse(res, 200, responseMessage.SUCCESS, courses)
@@ -51,14 +59,17 @@ export default {
             const { name, short_name, description, order_no, institute } = req.body
 
             if (!institute || !institute.connect || !institute.connect.id) {
+
                 const body: HttpResponse = {
                     code: HttpStatusCode.BadRequest,
                     message: 'Institute connection data is missing.',
                     data: {}
                 }
+
                 res.status(body.code).json(body)
                 return
             }
+
             const courseData = {
                 name,
                 short_name,
@@ -76,6 +87,7 @@ export default {
             httpResponse(res, 200, responseMessage.SUCCESS, post)
         } catch (error) {
             if (error instanceof Prisma.PrismaClientKnownRequestError) {
+
                 if (error.code === 'P2003') {
                     const body: HttpResponse = {
                         code: HttpStatusCode.BadRequest,
@@ -102,14 +114,15 @@ export default {
 
     delete: async (req: Request<{}, {}, IDeleteRequestBody>, res: Response, next: NextFunction): Promise<void> => {
         try {
-            const { id } = req.body
 
+            const { id } = req.body
 
             const deletedInstitute = await prisma.course.delete({
                 where: { id: id }
             })
 
             httpResponse(res, 200, responseMessage.SUCCESS, deletedInstitute)
+
         } catch (error) {
 
             // If the record is not found, Prisma throws an error
@@ -158,6 +171,7 @@ export default {
                     return
                 }
             }
+
             httpError(next, error, req, 500)
         }
     }
