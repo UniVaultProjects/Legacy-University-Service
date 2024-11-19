@@ -13,14 +13,6 @@ import { IPostRequestBody, IUpdateRequestBody, IDeleteRequestBody } from '../../
 const prisma = new PrismaClient()
 
 export default {
-    /**
-   * @Route: GET /institute
-    Export an object with login method for user authentication.
-    Here AuthComm is passing a req.ops object that contains
-    various metadata such as institute id's and operations allowed.
-    only allowed operation [GET] and allowed institutes can be accesed.
-   **/
-
     get: async (req: Request, res: Response, next: NextFunction) => {
         try {
             if (!req.user_details) {
@@ -51,26 +43,23 @@ export default {
                 institutes = response
             }
 
-            // Success Response.
             return httpResponse(res, 200, responseMessage.SUCCESS, institutes)
         } catch (error) {
             httpError(next, error, req, 500)
         }
     },
 
-    // Create institute
     post: async (req: Request<{}, {}, NonNullable<IPostRequestBody>>, res: Response, next: NextFunction): Promise<void> => {
         try {
             const { name, short_name, description, order_no } = req.body
 
             let post
 
-            // Prepare the institute data
             const instituteData: IPostRequestBody = {
-                name, // Using the destructured variable
-                short_name, // Using the destructured variable
-                description, // Using the destructured variable
-                order_no // Using the destructured variable
+                name,
+                short_name,
+                description,
+                order_no
             }
 
             // Check if an Institute with the same name, short_name, description, and order_no already exists
@@ -94,14 +83,11 @@ export default {
                 })
                 httpResponse(res, 200, responseMessage.SUCCESS, post)
             }
-
-            // Send a success response
         } catch (error: unknown) {
             httpError(next, error, req, 500)
         }
     },
 
-    // Delete institute
     delete: async (req: Request<{}, {}, IDeleteRequestBody>, res: Response, next: NextFunction): Promise<void> => {
         try {
             const { id } = req.body
@@ -135,14 +121,11 @@ export default {
                     }
                 })
 
-                // Return the result of the deleted institute
                 return deletedInstitute
             })
-            // Send a success response & deleted record.
+
             httpResponse(res, 200, responseMessage.SUCCESS, result)
         } catch (error) {
-            // If the record is not found, Prisma throws an error
-            // Type assertion for error
             if (error instanceof Prisma.PrismaClientKnownRequestError) {
                 if (error.code === 'P2025') {
                     const body: HttpResponse = {
@@ -157,12 +140,11 @@ export default {
             httpError(next, error, req, 500)
         }
     },
-    // Delete institute
+
     update: async (req: Request<{}, {}, IUpdateRequestBody>, res: Response, next: NextFunction): Promise<void> => {
         try {
             const { id, name, short_name, description, order_no } = req.body
 
-            // Find Object by id
             const updateInstitute = await prisma.institute.update({
                 where: {
                     id: id
@@ -175,11 +157,8 @@ export default {
                 }
             })
 
-            // Send a success response & deleted record.
             httpResponse(res, 200, responseMessage.SUCCESS, updateInstitute)
         } catch (error) {
-            // If the record is not found, Prisma throws an error
-            // Type assertion for error
             if (error instanceof Prisma.PrismaClientKnownRequestError) {
                 if (error.code === 'P2025') {
                     const body: HttpResponse = {

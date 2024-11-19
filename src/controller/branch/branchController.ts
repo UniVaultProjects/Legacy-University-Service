@@ -13,9 +13,9 @@ const prisma = new PrismaClient()
 export default {
     get: async (req: Request, res: Response, next: NextFunction) => {
         try {
+
             const response: Branch[] = await prisma.branch.findMany()
 
-            // Success Response.
             return httpResponse(res, 200, responseMessage.SUCCESS, response)
         } catch (error) {
             httpError(next, error, req, 500)
@@ -39,7 +39,6 @@ export default {
                 return
             }
 
-            // Prepare the Branch data
             const branchData: IPostRequestBody = {
                 name, 
                 short_name, 
@@ -75,7 +74,6 @@ export default {
                 httpResponse(res, 200, responseMessage.SUCCESS, post)
             }
 
-            // Send a success response
         } catch (error: unknown) {
             httpError(next, error, req, 500)
         }
@@ -96,12 +94,10 @@ export default {
                 return response
             })
 
-            // Send a success response & deleted record.
             httpResponse(res, 200, responseMessage.SUCCESS, result)
         } catch (error) {
 
             // If the record is not found, Prisma throws an error
-            // Type assertion for error
             if (error instanceof Prisma.PrismaClientKnownRequestError) {
                 if (error.code === 'P2025') {
                     const body: HttpResponse = {
@@ -133,8 +129,7 @@ export default {
                     order_no
                 }
             })
-
-            // Send a success response & deleted record.
+            
             httpResponse(res, 200, responseMessage.SUCCESS, updateInstitute)
         } catch (error) {
 

@@ -99,21 +99,20 @@ export default {
             httpError(next, error, req, 500)
         }
     },
-    // Delete institute
+
     delete: async (req: Request<{}, {}, IDeleteRequestBody>, res: Response, next: NextFunction): Promise<void> => {
         try {
             const { id } = req.body
 
-            // Find Object by id
+
             const deletedInstitute = await prisma.course.delete({
                 where: { id: id }
             })
 
-            // Send a success response & deleted record.
             httpResponse(res, 200, responseMessage.SUCCESS, deletedInstitute)
         } catch (error) {
+
             // If the record is not found, Prisma throws an error
-            // Type assertion for error
             if (error instanceof Prisma.PrismaClientKnownRequestError) {
                 if (error.code === 'P2025') {
                     const body: HttpResponse = {
@@ -128,12 +127,11 @@ export default {
             httpError(next, error, req, 500)
         }
     },
-    // Update institute
+
     update: async (req: Request<{}, {}, IUpdateRequestBody>, res: Response, next: NextFunction): Promise<void> => {
         try {
             const { id, name, short_name, description, order_no } = req.body
 
-            // Find Object by id
             const updateInstitute = await prisma.institute.update({
                 where: {
                     id: id
@@ -146,11 +144,9 @@ export default {
                 }
             })
 
-            // Send a success response & deleted record.
             httpResponse(res, 200, responseMessage.SUCCESS, updateInstitute)
         } catch (error) {
-            // If the record is not found, Prisma throws an error
-            // Type assertion for error
+            
             if (error instanceof Prisma.PrismaClientKnownRequestError) {
                 if (error.code === 'P2025') {
                     const body: HttpResponse = {
