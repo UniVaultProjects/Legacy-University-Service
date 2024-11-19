@@ -8,7 +8,6 @@ import { HttpResponse } from '../../types/httpTypes'
 import { HttpStatusCode } from 'axios'
 import { UserType } from '../../enum/userType'
 import { Allow } from '../../enum/permissionAllowed'
-
 import { IPostRequestBody, IDeleteRequestBody, IUpdateRequestBody } from '../../interfaces/course.interface'
 
 const prisma = new PrismaClient()
@@ -23,9 +22,9 @@ export default {
             let courses: Course[] = []
 
             if (req.user_details?.user_type == UserType.admin) {
-                const response = await prisma.course.findMany({ 
-                    include : {
-                        branches : true
+                const response = await prisma.course.findMany({
+                    include: {
+                        branches: true
                     }
                 })
                 courses = response
@@ -66,7 +65,7 @@ export default {
                 description,
                 order_no,
                 institute: {
-                    connect: { id: institute.connect.id } // Connect to existing institute
+                    connect: { id: institute.connect.id }
                 }
             }
 
@@ -80,7 +79,7 @@ export default {
                 if (error.code === 'P2003') {
                     const body: HttpResponse = {
                         code: HttpStatusCode.BadRequest,
-                        message: 'Invalid institute ID provided.',
+                        message: 'Invalid courseID provided.',
                         data: {}
                     }
                     res.status(body.code).json(body)
@@ -119,7 +118,7 @@ export default {
                 if (error.code === 'P2025') {
                     const body: HttpResponse = {
                         code: HttpStatusCode.BadRequest,
-                        message: 'institute not found!',
+                        message: 'Course not found!',
                         data: {}
                     }
                     res.status(body.code).json(body)
@@ -156,7 +155,7 @@ export default {
                 if (error.code === 'P2025') {
                     const body: HttpResponse = {
                         code: HttpStatusCode.BadRequest,
-                        message: 'institute not found!',
+                        message: 'Course not found!',
                         data: {}
                     }
                     res.status(body.code).json(body)

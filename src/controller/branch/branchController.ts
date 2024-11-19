@@ -22,28 +22,29 @@ export default {
         }
     },
 
-    // Create institute
+    // Create Branch
     post: async (req: Request<{}, {}, NonNullable<IPostRequestBody>>, res: Response, next: NextFunction): Promise<void> => {
         try {
+
             let post
             const { name, short_name, description, order_no, course } = req.body
 
             if (!course || !course.connect || !course.connect.id) {
                 const body: HttpResponse = {
                     code: HttpStatusCode.BadRequest,
-                    message: 'Institute connection data is missing.',
+                    message: 'Branch connection data is missing.',
                     data: {}
                 }
                 res.status(body.code).json(body)
                 return
             }
 
-            // Prepare the institute data
+            // Prepare the Branch data
             const branchData: IPostRequestBody = {
-                name, // Using the destructured variable
-                short_name, // Using the destructured variable
-                description, // Using the destructured variable
-                order_no, // Using the destructured variable
+                name, 
+                short_name, 
+                description, 
+                order_no,
                 course: {
                     connect: {
                         id: course.connect.id
@@ -51,7 +52,7 @@ export default {
                 }
             }
 
-            // Check if an Institute with the same name, short_name, description, and order_no already exists
+            // Check if an Branch with the same name, short_name, description, and order_no already exists
             const existingBranch = await prisma.branch.findFirst({
                 where: {
                     OR: [{ name }, { short_name }]
@@ -59,10 +60,11 @@ export default {
             })
 
             if (existingBranch) {
-                // If an institute with the same attributes exists, send a conflict response
+
+                // If an Branch with the same attributes exists, send a conflict response
                 const body: HttpResponse = {
                     code: HttpStatusCode.Conflict,
-                    message: 'An branch with the same name , short name already exists',
+                    message: 'An branch with the same name , short name already exists.',
                     data: {}
                 }
                 res.status(body.code).json(body)
@@ -79,7 +81,7 @@ export default {
         }
     },
 
-    // Delete institute
+    // Delete Branch
     delete: async (req: Request<{}, {}, IDeleteRequestBody>, res: Response, next: NextFunction): Promise<void> => {
         try {
             const { id } = req.body
@@ -97,13 +99,14 @@ export default {
             // Send a success response & deleted record.
             httpResponse(res, 200, responseMessage.SUCCESS, result)
         } catch (error) {
+
             // If the record is not found, Prisma throws an error
             // Type assertion for error
             if (error instanceof Prisma.PrismaClientKnownRequestError) {
                 if (error.code === 'P2025') {
                     const body: HttpResponse = {
                         code: HttpStatusCode.BadRequest,
-                        message: 'branch not found!',
+                        message: 'branch not found!.',
                         data: {}
                     }
                     res.status(body.code).json(body)
@@ -113,12 +116,12 @@ export default {
             httpError(next, error, req, 500)
         }
     },
-    // Delete institute
+
+    // Delete Branch
     update: async (req: Request<{}, {}, IUpdateRequestBody>, res: Response, next: NextFunction): Promise<void> => {
         try {
             const { id, name, short_name, description, order_no } = req.body
 
-            // Find Object by id
             const updateInstitute = await prisma.branch.update({
                 where: {
                     id: id
@@ -134,13 +137,14 @@ export default {
             // Send a success response & deleted record.
             httpResponse(res, 200, responseMessage.SUCCESS, updateInstitute)
         } catch (error) {
+
             // If the record is not found, Prisma throws an error
             // Type assertion for error
             if (error instanceof Prisma.PrismaClientKnownRequestError) {
                 if (error.code === 'P2025') {
                     const body: HttpResponse = {
                         code: HttpStatusCode.BadRequest,
-                        message: 'institute not found!',
+                        message: 'branch not found!.',
                         data: {}
                     }
                     res.status(body.code).json(body)
