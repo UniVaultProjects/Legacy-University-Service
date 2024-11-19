@@ -70,13 +70,14 @@ export default {
             })
 
             if (existingInstitute) {
+                
                 // If an institute with the same attributes exists, send a conflict response
                 const body: HttpResponse = {
                     code: HttpStatusCode.Conflict,
                     message: 'An institute with the same name, short name, description, or order number already exists.',
                     data: {}
                 }
-                res.status(body.code).json(body)
+                httpResponse(res,body.code,body.message,body.data)
             } else {
                 post = await prisma.institute.create({
                     data: instituteData
